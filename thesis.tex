@@ -1,0 +1,723 @@
+\documentclass[12pt,a4paper,oneside]{report}
+
+% Package imports
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{geometry}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{tocloft}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{cite}
+\usepackage{appendix}
+
+% Page geometry
+\geometry{
+    left=3cm,
+    right=2.5cm,
+    top=2.5cm,
+    bottom=2.5cm
+}
+
+% Header and footer
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\nouppercase{\leftmark}}
+\fancyhead[R]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% Line spacing
+\onehalfspacing
+
+% Code listing settings
+\lstset{
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue},
+    commentstyle=\color{green!60!black},
+    stringstyle=\color{red},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    breaklines=true,
+    frame=single,
+    tabsize=4,
+    showstringspaces=false
+}
+
+% Hyperref settings
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    citecolor=blue,
+    urlcolor=blue,
+    pdftitle={Comparative Analysis of Stream Ciphers},
+    pdfauthor={Idriss Youssouf Azibert}
+}
+
+% Theorem environments
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+
+% Document begins
+\begin{document}
+
+% ============================================================
+% TITLE PAGE
+% ============================================================
+\begin{titlepage}
+    \centering
+    \vspace*{1cm}
+    
+    {\LARGE\textbf{University Name}}\\[0.5cm]
+    {\large Faculty of Computer Science}\\[0.5cm]
+    {\large Department of Information Security}\\[3cm]
+    
+    {\Huge\bfseries Comparative Analysis of Stream Ciphers}\\[0.5cm]
+    {\LARGE\bfseries From the Vernam Cipher to Modern Cryptographic Algorithms}\\[3cm]
+    
+    {\Large Bachelor's/Master's Thesis}\\[2cm]
+    
+    \begin{flushleft}
+        \large
+        \textbf{Author:}\\
+        Idriss Youssouf Azibert\\[1cm]
+        
+        \textbf{Supervisor:}\\
+        Dr. Horváth Géza\\
+        Department of Information Security\\[2cm]
+    \end{flushleft}
+    
+    \vfill
+    
+    {\large City, 2025}
+    
+\end{titlepage}
+
+% ============================================================
+% DECLARATION
+% ============================================================
+\chapter*{Declaration of Authorship}
+\thispagestyle{empty}
+
+I hereby declare that this thesis is my own work and effort. Where other sources of information have been used, they have been acknowledged.
+
+\vspace{2cm}
+
+\noindent
+Date: \rule{4cm}{0.4pt} \hfill Signature: \rule{5cm}{0.4pt}
+
+\cleardoublepage
+
+% ============================================================
+% ACKNOWLEDGMENTS
+% ============================================================
+\chapter*{Acknowledgments}
+\addcontentsline{toc}{chapter}{Acknowledgments}
+
+I would like to express my sincere gratitude to my supervisor, Dr. Horváth Géza, for his invaluable guidance, continuous support, and insightful feedback throughout the development of this thesis. His expertise in cryptography and security has been instrumental in shaping this work.
+
+I am also grateful to the faculty members of the Department of Information Security for providing me with the knowledge and tools necessary to undertake this research.
+
+Finally, I would like to thank my family and friends for their unwavering support and encouragement during my studies.
+
+\cleardoublepage
+
+% ============================================================
+% ABSTRACT
+% ============================================================
+\chapter*{Abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+
+Stream ciphers have played a crucial role in secure communication systems for over a century, evolving from simple mechanical devices to sophisticated software algorithms. This thesis presents a comprehensive comparative analysis of stream cipher algorithms, tracing their development from the Vernam cipher, invented in 1917, to modern cryptographic systems of the 21st century.
+
+The study examines representative algorithms from different eras: the Vernam cipher as the theoretical foundation, RC4 as a widely-deployed but now deprecated system, lightweight ciphers Grain and Trivium designed for hardware efficiency, and modern high-performance algorithms Salsa20 and ChaCha20 that have become standards in contemporary cryptographic protocols.
+
+The comparison encompasses multiple dimensions: security analysis based on resistance to cryptanalytic attacks, computational complexity and operational efficiency, implementation complexity and code characteristics, and memory requirements for practical deployment. Each algorithm is implemented and subjected to rigorous benchmarking to provide empirical performance data.
+
+Results demonstrate the significant evolution in stream cipher design, highlighting the trade-offs between security, performance, and resource utilization. Modern ciphers like ChaCha20 offer superior security properties while maintaining high throughput and efficiency across diverse computing platforms. The findings provide practical guidance for selecting appropriate stream ciphers based on specific application requirements and constraints.
+
+\textbf{Keywords:} Stream Ciphers, Cryptography, Vernam Cipher, RC4, Grain, Trivium, Salsa20, ChaCha20, Cryptanalysis, Performance Analysis
+
+\cleardoublepage
+
+% ============================================================
+% TABLE OF CONTENTS
+% ============================================================
+\tableofcontents
+\cleardoublepage
+
+% ============================================================
+% LIST OF FIGURES
+% ============================================================
+\listoffigures
+\addcontentsline{toc}{chapter}{List of Figures}
+\cleardoublepage
+
+% ============================================================
+% LIST OF TABLES
+% ============================================================
+\listoftables
+\addcontentsline{toc}{chapter}{List of Tables}
+\cleardoublepage
+
+% ============================================================
+% LIST OF ALGORITHMS
+% ============================================================
+\listofalgorithms
+\addcontentsline{toc}{chapter}{List of Algorithms}
+\cleardoublepage
+
+% ============================================================
+% MAIN CONTENT
+% ============================================================
+
+% Chapter 1: Introduction
+\chapter{Introduction}
+\label{ch:introduction}
+
+\section{Background and Motivation}
+\label{sec:background}
+
+In an increasingly digital world, the security of information has become paramount. Cryptography, the science of secure communication, provides the fundamental tools for protecting data confidentiality, integrity, and authenticity. Among cryptographic primitives, stream ciphers represent a class of symmetric encryption algorithms that have been employed for secure communication for over a century.
+
+Stream ciphers operate by generating a pseudorandom keystream that is combined with plaintext, typically using the XOR operation, to produce ciphertext. This approach offers several advantages, including high speed, low hardware complexity, and the ability to encrypt data of arbitrary length without padding. These characteristics have made stream ciphers particularly attractive for applications requiring real-time encryption, such as wireless communications, voice encryption, and network protocols.
+
+The history of stream ciphers begins with the Vernam cipher, also known as the one-time pad, developed by Gilbert Vernam in 1917. When used correctly with a truly random key of equal length to the message, the Vernam cipher provides perfect secrecy—a theoretical security guarantee proven by Claude Shannon in 1949. However, the practical limitations of key distribution and management have motivated the development of pseudorandom stream ciphers that approximate this ideal while remaining practically deployable.
+
+Over the past century, stream cipher design has evolved through several generations, each responding to new cryptanalytic techniques, technological advances, and changing application requirements. Early mechanical and electromechanical systems gave way to software-oriented designs in the late 20th century, with RC4 becoming one of the most widely deployed stream ciphers in protocols such as WEP, WPA, and SSL/TLS. However, various security vulnerabilities discovered in RC4 led to its deprecation and highlighted the ongoing need for cryptographic innovation.
+
+The 21st century has witnessed the development of stream ciphers specifically designed for resource-constrained environments (Grain, Trivium) and high-performance software implementations (Salsa20, ChaCha20). These modern algorithms incorporate lessons learned from decades of cryptanalysis and leverage contemporary understanding of both security requirements and implementation considerations.
+
+\section{Research Objectives}
+\label{sec:objectives}
+
+The primary objective of this thesis is to conduct a comprehensive comparative analysis of stream cipher algorithms spanning the entire history of this cryptographic primitive. Specifically, this research aims to:
+
+\begin{enumerate}
+    \item Examine the theoretical foundations and design principles of stream ciphers, including the concept of perfect secrecy and practical security considerations.
+    
+    \item Analyze a representative selection of stream ciphers from different historical periods and design paradigms, including:
+    \begin{itemize}
+        \item Vernam cipher (one-time pad)
+        \item RC4 (deprecated legacy algorithm)
+        \item Grain (lightweight hardware-oriented cipher)
+        \item Trivium (eSTREAM portfolio cipher)
+        \item Salsa20 (high-performance software cipher)
+        \item ChaCha20 (modern standard cipher)
+    \end{itemize}
+    
+    \item Evaluate and compare these algorithms across multiple dimensions:
+    \begin{itemize}
+        \item Security properties and resistance to known attacks
+        \item Computational complexity and algorithmic operations
+        \item Performance characteristics and encryption speed
+        \item Implementation complexity and code characteristics
+        \item Memory requirements and resource utilization
+    \end{itemize}
+    
+    \item Implement selected algorithms in appropriate programming environments to facilitate empirical performance evaluation.
+    
+    \item Conduct systematic benchmarking to measure and compare practical performance metrics.
+    
+    \item Provide evidence-based recommendations for cipher selection based on specific application requirements and constraints.
+\end{enumerate}
+
+\section{Thesis Structure}
+\label{sec:structure}
+
+This thesis is organized as follows:
+
+\textbf{Chapter \ref{ch:fundamentals}} establishes the theoretical foundation by introducing fundamental cryptographic concepts, defining stream ciphers and their properties, discussing security requirements and attack models, and reviewing key distribution and synchronization issues.
+
+\textbf{Chapter \ref{ch:history}} provides historical context by tracing the evolution of stream ciphers from early mechanical systems through the development of modern algorithms, highlighting major cryptanalytic breakthroughs that have shaped cipher design.
+
+\textbf{Chapter \ref{ch:algorithms}} presents detailed descriptions of the selected stream ciphers, explaining their design rationale, algorithmic structure, and known security properties.
+
+\textbf{Chapter \ref{ch:methodology}} describes the research methodology, including implementation approaches, benchmarking procedures, and evaluation criteria.
+
+\textbf{Chapter \ref{ch:implementation}} discusses the practical implementation of selected algorithms, addressing design decisions, optimization techniques, and verification approaches.
+
+\textbf{Chapter \ref{ch:analysis}} presents the comparative analysis, including security evaluation, performance benchmarking results, and comparative discussion of trade-offs.
+
+\textbf{Chapter \ref{ch:results}} synthesizes the findings, providing recommendations for practical deployment and discussing the implications for stream cipher selection.
+
+\textbf{Chapter \ref{ch:conclusion}} concludes the thesis by summarizing key findings, discussing limitations, and suggesting directions for future research.
+
+\section{Contributions}
+\label{sec:contributions}
+
+This thesis makes several contributions to the understanding and practical application of stream ciphers:
+
+\begin{itemize}
+    \item A comprehensive historical perspective on stream cipher evolution, connecting theoretical foundations to modern practice.
+    
+    \item Systematic comparison of representative algorithms across multiple evaluation dimensions, providing both theoretical and empirical insights.
+    
+    \item Practical implementation and benchmarking results that quantify performance trade-offs across diverse cipher designs.
+    
+    \item Evidence-based guidance for selecting appropriate stream ciphers for specific application contexts.
+    
+    \item Open-source implementations that can serve as educational resources and benchmarking references for future work.
+\end{itemize}
+
+% Chapter 2: Fundamentals of Stream Ciphers
+\chapter{Fundamentals of Stream Ciphers}
+\label{ch:fundamentals}
+
+\section{Introduction to Cryptography}
+\label{sec:crypto-intro}
+
+Cryptography is the science and practice of secure communication in the presence of adversaries. A cryptographic system, or cryptosystem, transforms plaintext (original data) into ciphertext (encrypted data) using an encryption algorithm and a secret key, such that unauthorized parties cannot efficiently recover the plaintext without knowledge of the key.
+
+\subsection{Symmetric vs. Asymmetric Cryptography}
+
+Cryptographic systems are broadly classified into two categories:
+
+\textbf{Symmetric cryptography} (also called secret-key cryptography) uses the same key for both encryption and decryption. The security of the system depends on keeping this key secret. Symmetric algorithms are generally much faster than asymmetric alternatives and are suitable for encrypting large amounts of data.
+
+\textbf{Asymmetric cryptography} (also called public-key cryptography) uses a pair of mathematically related keys: a public key for encryption and a private key for decryption. While asymmetric systems solve key distribution problems, they are computationally more expensive.
+
+Stream ciphers belong to the category of symmetric encryption algorithms.
+
+\subsection{Block Ciphers vs. Stream Ciphers}
+
+Symmetric encryption algorithms are further divided into block ciphers and stream ciphers:
+
+\textbf{Block ciphers} encrypt fixed-size blocks of data (typically 64 or 128 bits) using a fixed transformation determined by the key. Examples include DES, AES, and Blowfish. To encrypt messages longer than the block size, modes of operation are required.
+
+\textbf{Stream ciphers} encrypt data bit-by-bit or byte-by-byte by generating a pseudorandom keystream that is combined with the plaintext. Stream ciphers are generally faster and have lower hardware complexity than block ciphers, making them suitable for applications with limited resources or real-time requirements.
+
+\section{Stream Cipher Fundamentals}
+\label{sec:stream-fundamentals}
+
+\subsection{Basic Operation}
+
+A stream cipher consists of two primary components:
+
+\begin{enumerate}
+    \item \textbf{Keystream generator}: A deterministic algorithm that produces a pseudorandom sequence of bits (the keystream) from a secret key and, optionally, an initialization vector (IV).
+    
+    \item \textbf{Combining function}: A function that combines the keystream with the plaintext to produce ciphertext. The most common combining function is the XOR (exclusive-or) operation.
+\end{enumerate}
+
+The encryption process can be expressed mathematically as:
+
+\begin{equation}
+    c_i = p_i \oplus k_i
+\end{equation}
+
+where $p_i$ is the $i$-th bit (or byte) of plaintext, $k_i$ is the $i$-th bit (or byte) of the keystream, $c_i$ is the $i$-th bit (or byte) of ciphertext, and $\oplus$ denotes the XOR operation.
+
+Decryption is performed identically:
+
+\begin{equation}
+    p_i = c_i \oplus k_i
+\end{equation}
+
+This symmetry is a consequence of the XOR operation's property: $a \oplus b \oplus b = a$.
+
+\subsection{Classification of Stream Ciphers}
+
+Stream ciphers can be classified based on how the keystream depends on the plaintext:
+
+\textbf{Synchronous stream ciphers}: The keystream is generated independently of the plaintext and ciphertext. The sender and receiver must maintain synchronization. If synchronization is lost (e.g., due to transmission errors), resynchronization is required.
+
+\textbf{Self-synchronizing stream ciphers}: The keystream generation depends on a fixed number of previous ciphertext bits. These ciphers automatically resynchronize after a fixed number of bits following an error or loss of synchronization.
+
+Most modern stream ciphers are synchronous, as they offer better security properties and simpler analysis.
+
+\subsection{Initialization Vectors}
+
+To prevent keystream reuse when encrypting multiple messages with the same key, stream ciphers typically use an initialization vector (IV) or nonce. The IV is a non-secret value that, combined with the key, produces a unique keystream for each message.
+
+The security requirement is that the same (key, IV) pair should never be reused, as this would result in keystream reuse, which can compromise security:
+
+\begin{align}
+    c_1 &= p_1 \oplus k \\
+    c_2 &= p_2 \oplus k \\
+    c_1 \oplus c_2 &= p_1 \oplus p_2
+\end{align}
+
+This allows an attacker to analyze the XOR of two plaintexts without knowing the key.
+
+\section{Security Requirements}
+\label{sec:security-requirements}
+
+\subsection{Perfect Secrecy}
+
+The concept of perfect secrecy, formalized by Claude Shannon in 1949, represents the theoretical ideal for encryption systems. A cipher provides perfect secrecy if the ciphertext reveals no information about the plaintext beyond its length.
+
+Formally, a cryptosystem provides perfect secrecy if:
+
+\begin{equation}
+    P(P=p|C=c) = P(P=p)
+\end{equation}
+
+for all plaintexts $p$ and ciphertexts $c$, meaning that observing the ciphertext does not change the probability distribution of the plaintext.
+
+Shannon proved that perfect secrecy requires:
+\begin{itemize}
+    \item The key must be at least as long as the message
+    \item The key must be truly random
+    \item Each key must be used only once
+\end{itemize}
+
+The Vernam cipher (one-time pad) achieves perfect secrecy when these conditions are met. However, these requirements make perfect secrecy impractical for most applications, leading to the development of computationally secure stream ciphers.
+
+\subsection{Computational Security}
+
+Since perfect secrecy is impractical, modern stream ciphers aim for computational security, which requires that:
+
+\begin{enumerate}
+    \item Breaking the cipher should require computational resources (time, memory, etc.) that exceed what is available to realistic attackers.
+    
+    \item The security level should be sufficient for the intended application's lifetime and threat model.
+\end{enumerate}
+
+For a stream cipher with a $k$-bit key, the best generic attack is brute force key search, which requires approximately $2^{k-1}$ operations on average. To provide adequate security margin, modern ciphers typically use keys of 128 bits or longer.
+
+\subsection{Randomness Requirements}
+
+The security of a stream cipher depends critically on the properties of the generated keystream. An ideal keystream should be:
+
+\textbf{Unpredictable}: Given any portion of the keystream, it should be computationally infeasible to predict future or past keystream bits with probability better than random guessing.
+
+\textbf{Indistinguishable from random}: Statistical tests should not be able to distinguish the keystream from a truly random sequence.
+
+\textbf{Long period}: The keystream should not repeat for an impractically long time. For a cipher with $k$-bit internal state, the maximum possible period is $2^k$.
+
+Various statistical test suites, such as NIST SP 800-22 and TestU01, can evaluate the randomness quality of keystream generators.
+
+\section{Attack Models and Cryptanalysis}
+\label{sec:attacks}
+
+\subsection{Attack Scenarios}
+
+Cryptanalytic attacks on stream ciphers can be classified based on the attacker's capabilities:
+
+\textbf{Ciphertext-only attack}: The attacker has access only to ciphertext and attempts to recover plaintext or key information.
+
+\textbf{Known-plaintext attack}: The attacker has access to one or more plaintext-ciphertext pairs encrypted under the same key.
+
+\textbf{Chosen-plaintext attack}: The attacker can choose plaintexts and obtain their encryptions under the target key.
+
+\textbf{Chosen-ciphertext attack}: The attacker can choose ciphertexts and obtain their decryptions.
+
+A secure stream cipher should resist all these attack models.
+
+\subsection{Common Attack Techniques}
+
+\textbf{Brute force attack}: Exhaustively searching all possible keys. For a $k$-bit key, this requires approximately $2^k$ trials. Proper key length (128 bits or more) makes this attack impractical.
+
+\textbf{Statistical attacks}: Exploiting non-random patterns in the keystream. Statistical biases can sometimes be detected and exploited to distinguish the cipher from random or to recover key information.
+
+\textbf{Algebraic attacks}: Representing the cipher as a system of algebraic equations and attempting to solve for the key. The effectiveness depends on the degree of the equations and the cipher's algebraic structure.
+
+\textbf{Correlation attacks}: Applicable to combination generators and filter generators. These attacks exploit correlations between the output sequence and internal state variables.
+
+\textbf{Time-memory-data trade-off attacks}: Preprocessing attacks that trade off computational time, memory storage, and amount of data to recover keys more efficiently than brute force.
+
+\textbf{Side-channel attacks}: Exploiting physical implementation characteristics such as timing variations, power consumption, or electromagnetic emanations to recover secret information.
+
+\subsection{Security Goals}
+
+A secure stream cipher should satisfy the following goals:
+
+\begin{itemize}
+    \item \textbf{Key recovery resistance}: It should be computationally infeasible to recover the secret key from known keystream output.
+    
+    \item \textbf{Distinguishing resistance}: The keystream should be computationally indistinguishable from a truly random sequence.
+    
+    \item \textbf{Prediction resistance}: Given a portion of the keystream, it should be computationally infeasible to predict past or future keystream bits.
+    
+    \item \textbf{IV security}: Different IVs with the same key should produce independent keystreams.
+\end{itemize}
+
+\section{Performance Considerations}
+\label{sec:performance}
+
+Beyond security, practical stream ciphers must meet performance requirements:
+
+\subsection{Throughput}
+
+Encryption and decryption speed are critical for many applications. Stream ciphers are generally designed to be fast, but performance varies significantly:
+
+\begin{itemize}
+    \item Software performance depends on the operations used (e.g., bitwise operations, additions, multiplications) and how well they map to processor instructions.
+    
+    \item Hardware performance depends on circuit complexity, parallelizability, and critical path length.
+\end{itemize}
+
+\subsection{Initialization Overhead}
+
+The time required to initialize the cipher's internal state from the key and IV can be significant, especially for short messages. Efficient initialization is important for applications that encrypt many short messages.
+
+\subsection{Memory Requirements}
+
+Stream ciphers vary in their memory requirements:
+
+\begin{itemize}
+    \item State size: The amount of memory needed to store the internal state.
+    \item Code size: The amount of memory needed to store the implementation.
+    \item Working memory: Additional memory needed during encryption/decryption.
+\end{itemize}
+
+For resource-constrained devices (e.g., IoT sensors, RFID tags), minimizing memory requirements is crucial.
+
+\subsection{Power Consumption}
+
+For battery-powered devices, energy efficiency is important. This depends on both the number and type of operations performed and the hardware implementation efficiency.
+
+% Chapter 3: Historical Evolution of Stream Ciphers
+\chapter{Historical Evolution of Stream Ciphers}
+\label{ch:history}
+
+\section{Early History (1917-1970s)}
+\label{sec:early-history}
+
+\subsection{The Vernam Cipher and One-Time Pad}
+
+The history of modern stream ciphers begins in 1917 with Gilbert Vernam's invention of an electrical encryption system for teletype communications. Vernam, an engineer at AT\&T, developed a cipher that combined plaintext with a key sequence using the XOR operation—a principle that remains fundamental to stream ciphers today.
+
+The Vernam cipher's most important variant is the one-time pad, which uses a truly random key sequence as long as the message itself, with each key used only once. This system possesses unique cryptographic properties that were rigorously proven by Claude Shannon in his landmark 1949 paper "Communication Theory of Secrecy Systems."
+
+Shannon demonstrated that the one-time pad provides perfect secrecy—the strongest possible security guarantee. However, this perfect security comes at an impractical cost: keys must be as long as all messages to be encrypted, truly random, and never reused. These requirements make key distribution and management prohibitively difficult for most applications.
+
+Despite its impracticality for general use, the one-time pad has been employed in highly sensitive diplomatic and military communications, where its absolute security justifies the operational burden. Notable uses include the Moscow-Washington hotline during the Cold War.
+
+\subsection{Mechanical and Electromechanical Systems}
+
+The mid-20th century saw the development of mechanical and electromechanical stream cipher devices, most notably rotor machines. While the German Enigma machine is technically a rotor machine, it operated more as a complex substitution cipher than a pure stream cipher.
+
+The Lorenz cipher (SZ40/42), used by German high command during World War II for strategic communications, more closely resembles a stream cipher. It used twelve rotors arranged in groups to generate a complex pseudorandom keystream. The cryptanalysis of Lorenz traffic at Bletchley Park, led by Bill Tutte and implemented in Colossus (arguably the world's first programmable electronic computer), represents a landmark achievement in both cryptanalysis and computing history.
+
+\subsection{Linear Feedback Shift Registers}
+
+The development of Linear Feedback Shift Registers (LFSRs) in the 1960s provided a mathematically well-understood mechanism for generating pseudorandom sequences. An LFSR consists of a series of storage elements (bits) and a feedback function that determines the next state based on the current state.
+
+An $n$-bit LFSR can be represented mathematically using its characteristic polynomial over the binary field $GF(2)$:
+
+\begin{equation}
+    P(x) = x^n + c_{n-1}x^{n-1} + \cdots + c_1x + c_0
+\end{equation}
+
+If this polynomial is primitive, the LFSR generates a maximum-length sequence with period $2^n - 1$, visiting all non-zero states exactly once before repeating.
+
+LFSRs offer several advantages: efficient hardware implementation, well-understood mathematical properties, and maximum-length periods. However, LFSRs used alone are cryptographically weak—the output sequence can be reconstructed from $2n$ consecutive output bits using the Berlekamp-Massey algorithm.
+
+This weakness led to the development of combination generators (combining outputs of multiple LFSRs), filter generators (nonlinearly filtering an LFSR's state), and clock-controlled generators (using one LFSR to control another's clocking).
+
+\section{Modern Era (1980s-2000s)}
+\label{sec:modern-era}
+
+\subsection{RC4 and Widespread Deployment}
+
+RC4 (Rivest Cipher 4), designed by Ron Rivest in 1987, represents a milestone in stream cipher design as one of the first widely deployed software-oriented algorithms. Its design differs fundamentally from LFSR-based ciphers, instead using a variable-length key (40-2048 bits) to initialize a 256-byte permutation table, which is then used to generate the keystream.
+
+RC4's simplicity and speed led to its adoption in numerous security protocols:
+
+\begin{itemize}
+    \item WEP (Wired Equivalent Privacy) for Wi-Fi security
+    \item WPA (Wi-Fi Protected Access) using TKIP
+    \item SSL/TLS for web security
+    \item Microsoft's Remote Desktop Protocol
+    \item PDF encryption
+\end{itemize}
+
+However, over time, various weaknesses were discovered in RC4:
+
+\begin{itemize}
+    \item Biases in the initial keystream bytes
+    \item Related-key attacks
+    \item Distinguishing attacks requiring feasible amounts of data
+    \item Practical attacks on WEP (2001) and TLS (2013-2015)
+\end{itemize}
+
+These vulnerabilities led to RC4's deprecation in major security standards. The IETF prohibited RC4 in TLS in 2015 (RFC 7465), and modern browsers have removed RC4 support. RC4's story illustrates how cryptanalytic advances can undermine once-trusted algorithms, emphasizing the need for conservative security margins and ongoing cryptanalytic scrutiny.
+
+\subsection{The eSTREAM Project}
+
+Recognizing the need for modern, well-analyzed stream ciphers, the European Network of Excellence in Cryptology (ECRYPT) launched the eSTREAM project in 2004. This multi-year effort aimed to identify new stream ciphers suitable for widespread adoption.
+
+The project established two profiles:
+
+\textbf{Profile 1 (Software)}: Ciphers optimized for software implementation in applications where high throughput is required.
+
+\textbf{Profile 2 (Hardware)}: Ciphers optimized for hardware implementation in resource-constrained environments.
+
+From 34 initial submissions, the project selected a portfolio of recommended ciphers in 2008:
+
+Software portfolio:
+\begin{itemize}
+    \item HC-128
+    \item Rabbit
+    \item Salsa20/12
+    \item SOSEMANUK
+\end{itemize}
+
+Hardware portfolio:
+\begin{itemize}
+    \item Grain v1
+    \item MICKEY v2
+    \item Trivium
+\end{itemize}
+
+The eSTREAM project significantly advanced stream cipher design and analysis, establishing design principles that continue to influence modern ciphers.
+
+\section{Contemporary Developments (2008-Present)}
+\label{sec:contemporary}
+
+\subsection{ChaCha20 and Modern Standards}
+
+Building on Salsa20's success in eSTREAM, Daniel J. Bernstein developed ChaCha20 in 2008 as an improved variant with better diffusion properties. ChaCha20 has achieved remarkable adoption in modern cryptographic protocols:
+
+\begin{itemize}
+    \item Google's TLS implementation (2013)
+    \item IETF standardization as RFC 7539 (2015)
+    \item Linux kernel for /dev/urandom (2017)
+    \item WireGuard VPN protocol
+    \item OpenSSH
+    \item Android full-disk encryption
+\end{itemize}
+
+ChaCha20's success derives from several factors:
+
+\begin{itemize}
+    \item Excellent software performance across diverse platforms
+    \item Resistance to timing attacks through uniform operation flow
+    \item Conservative security margin
+    \item Simple, analyzable design
+    \item Public domain status (no licensing restrictions)
+\end{itemize}
+
+\subsection{Lightweight Cryptography}
+
+The proliferation of resource-constrained devices (IoT sensors, RFID tags, medical implants) has driven research into lightweight stream ciphers. These designs prioritize minimal hardware area, low power consumption, and efficient implementation on constrained platforms.
+
+Notable lightweight stream ciphers include:
+
+\textbf{Grain-128a}: An enhanced version of Grain with authentication capabilities, suitable for extremely constrained environments.
+
+\textbf{Trivium}: Designed for hardware efficiency with a simple structure and 80-bit security level.
+
+\textbf{Acorn}: A lightweight authenticated cipher selected as a finalist in the CAESAR competition.
+
+The NIST Lightweight Cryptography standardization process (2018-2023) evaluated authenticated encryption algorithms for constrained devices, though the winner (Ascon) is not a traditional stream cipher.
+
+\subsection{Authenticated Encryption}
+
+Modern cryptographic protocols increasingly require authenticated encryption (AE), which provides both confidentiality and authenticity/integrity. While stream ciphers traditionally provided only confidentiality, contemporary designs often integrate authentication:
+
+\begin{itemize}
+    \item ChaCha20-Poly1305: Combines ChaCha20 stream cipher with Poly1305 MAC
+    \item Grain-128AEAD: Authenticated encryption variant of Grain
+    \item AEGIS: AES-based authenticated encryption with high performance
+\end{itemize}
+
+This trend reflects the broader shift in cryptographic protocol design toward ensuring both confidentiality and authenticity in a single efficient primitive.
+
+% NOTE: Due to length constraints, the remaining chapters (4-8) follow the same structure
+% They would include detailed algorithm descriptions, 
+% implementation details, performance analysis, comparative results, and conclusions.
+% You can expand these sections as you conduct your actual research and experiments.
+
+% Chapter 4: Selected Stream Cipher Algorithms
+\chapter{Selected Stream Cipher Algorithms}
+\label{ch:algorithms}
+
+% [Content continues with detailed algorithm descriptions]
+
+% Chapter 5: Research Methodology  
+\chapter{Research Methodology}
+\label{ch:methodology}
+
+% [Content continues with methodology details]
+
+% Chapter 6: Implementation
+\chapter{Implementation}
+\label{ch:implementation}
+
+% [Content continues with implementation details]
+
+% Chapter 7: Comparative Analysis
+\chapter{Comparative Analysis}
+\label{ch:analysis}
+
+% [Content continues with analysis]
+
+% Chapter 8: Results and Discussion
+\chapter{Results and Discussion}
+\label{ch:results}
+
+% [Content continues with results]
+
+% Chapter 9: Conclusion
+\chapter{Conclusion}
+\label{ch:conclusion}
+
+% [Content would include summary, contributions, limitations, and future work]
+
+% ============================================================
+% BIBLIOGRAPHY
+% ============================================================
+\begin{thebibliography}{99}
+
+\bibitem{shannon1949}
+Shannon, C. E. (1949). Communication theory of secrecy systems. \textit{Bell System Technical Journal}, 28(4), 656-715.
+
+\bibitem{vernam1926}
+Vernam, G. S. (1926). Cipher printing telegraph systems: For secret wire and radio telegraphic communications. \textit{Journal of the AIEE}, 45(2), 109-115.
+
+\bibitem{rc4rfc}
+Internet Engineering Task Force. (2015). Prohibiting RC4 Cipher Suites (RFC 7465).
+
+\bibitem{estream}
+ECRYPT. (2008). eSTREAM: the ECRYPT Stream Cipher Project.
+
+\bibitem{chacha}
+Bernstein, D. J. (2008). ChaCha, a variant of Salsa20. \textit{Workshop Record of SASC}, 8.
+
+\bibitem{salsa20}
+Bernstein, D. J. (2008). The Salsa20 family of stream ciphers. \textit{New Stream Cipher Designs}, 84-97.
+
+\bibitem{grain}
+Hell, M., Johansson, T., Maximov, A., \& Meier, W. (2011). The Grain family of stream ciphers. \textit{New Stream Cipher Designs}, 179-190.
+
+\bibitem{trivium}
+De Cannière, C., \& Preneel, B. (2008). Trivium. \textit{New Stream Cipher Designs}, 244-266.
+
+\end{thebibliography}
+
+% ============================================================
+% APPENDICES
+% ============================================================
+\appendix
+
+\chapter{Source Code Listings}
+\label{app:code}
+
+% [Would include full implementations]
+
+\chapter{Benchmark Data}
+\label{app:benchmarks}
+
+% [Would include detailed benchmark results]
+
+\chapter{Test Vectors}
+\label{app:testvectors}
+
+% [Would include test vectors for verification]
+
+\end{document}
