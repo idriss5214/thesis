@@ -1,66 +1,120 @@
-\documentclass[12pt]{report}
+\documentclass[12pt,a4paper,oneside]{report}
 \usepackage{times}
-\usepackage[a4paper, left=3cm, right=2cm, top=3cm, bottom=3cm]{geometry}
+\usepackage[a4paper,left=3cm,right=2cm,top=3cm,bottom=3cm]{geometry}
 \usepackage{setspace}
+\doublespacing
+\usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage{algorithm}
 \usepackage{algorithmic}
-\usepackage{tocbibind}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{listings}
+\usepackage{hyperref}
 
-\doublespacing
-
-\title{Thesis Title}
-\author{Idriss Youssouf Azibert}
-\date{Debrecen 2025}
+\title{Comparative Analysis of Stream Ciphers: From the Vernam Cipher to Modern Cryptographic Algorithms}
+\author{Idriss Youssouf Azibert\textbackslash \texttt{Computer Science Program}}
+\date{Debrecen, 2025}
 
 \begin{document}
 
-\maketitle
+\begin{titlepage}
+\centering
+\textbf{University of Debrecen}\\
+Faculty of Informatics\\
+Department of Information Security\\
+\vspace{2cm}
+\LARGE{Comparative Analysis of Stream Ciphers: From the Vernam Cipher to Modern Cryptographic Algorithms}\\
+\vfill
+\textbf{Author:} Idriss Youssouf Azibert\textbackslash \texttt{Computer Science Program}\\
+\textbf{Supervisor:} Dr. Horváth Géza\\
 
-\begin{abstract}
-% Abstract content here
-\end{abstract}
+\vspace{1cm}
+Debrecen, 2025
+\end{titlepage}
 
+\newpage
+\section*{Declaration of Authorship}
+This thesis is my own work and has not been submitted for any other degree.
+
+\newpage
 \tableofcontents
+\newpage
 \listoffigures
+\newpage
 \listoftables
+\newpage
 \listofalgorithms
+\newpage
 
 \chapter{Introduction}
-% Introduction content here
+\section{Background}
+\section{Objectives}
+\section{Structure}
+\section{Contributions}
 
 \chapter{Fundamentals of Stream Ciphers}
-% Fundamentals content here
+\section{Cryptography Basics}
+\section{Stream Cipher Fundamentals}
+\section{Security Requirements}
+\section{Attack Models}
 
 \chapter{Historical Evolution}
-% Historical content here
+\section{Early History}
+\section{Modern Era}
+\section{Contemporary Developments}
 
 \chapter{Selected Stream Cipher Algorithms}
-% Algorithms content here
+\section{Vernam}
+\section{RC4}
+\section{Grain-128a}
+\section{Trivium}
+\section{Salsa20}
+\section{ChaCha20}
 
 \chapter{Research Methodology}
-% Methodology content here
+\section{Research Approach}
+\section{Implementation Strategy}
+\section{Benchmarking}
+\section{Security Evaluation}
 
 \chapter{Implementation}
-% Implementation content here
+\section{API Design}
+\section{Code Examples}
 
 \chapter{Comparative Analysis}
-% Analysis content here
+\section{Security Comparison}
+\section{Performance Benchmarks}
+\section{Trade-off Analysis}
 
 \chapter{Results and Discussion}
-% Results content here
+\section{Findings}
+\section{Recommendations}
+\section{Practical Deployment Guidance}
 
 \chapter{Conclusion}
-% Conclusion content here
+\section{Summary}
+\section{Contributions}
+\section{Limitations}
+\section{Future Work}
 
-\bibliographystyle{plain}
-\bibliography{references}
+\newpage
+\begin{thebibliography}{99}
+\bibitem{shannon} Shannon, C. E. (1949). A mathematical theory of communication. 
+\bibitem{vernam} Vernam, G. S. (1926). Secret signaling system. 
+\bibitem{bernstein} Bernstein, D. J. (2004). Salsa20 and ChaCha20. 
+\bibitem{estream} eSTREAM, The ECRYPT Stream Cipher Project, 2005.
+\bibitem{rfc} RFCs related to stream ciphers.
+\bibitem{papers} Various academic papers.
+\end{thebibliography}
 
 \appendix
-\chapter{Appendices}
-% Appendices content here
+\chapter{Complete Source Code Listings}
+\chapter{Detailed Benchmark Data Tables}
+\chapter{Test Vectors for Verification}
 
+\newpage
 \section*{Acknowledgements}
-% Acknowledgements content here
+Thanks to Dr. Horváth Géza, faculty, family, and friends.
 
 \end{document}
