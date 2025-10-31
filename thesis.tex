@@ -1,64 +1,66 @@
+\documentclass[12pt]{report}
+\usepackage{times}
+\usepackage[a4paper, left=3cm, right=2cm, top=3cm, bottom=3cm]{geometry}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{tocbibind}
+
+\doublespacing
+
+\title{Thesis Title}
+\author{Idriss Youssouf Azibert}
+\date{Debrecen 2025}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+% Abstract content here
+\end{abstract}
+
+\tableofcontents
+\listoffigures
+\listoftables
+\listofalgorithms
+
+\chapter{Introduction}
+% Introduction content here
+
+\chapter{Fundamentals of Stream Ciphers}
+% Fundamentals content here
+
+\chapter{Historical Evolution}
+% Historical content here
+
 \chapter{Selected Stream Cipher Algorithms}
-\section{Vernam Cipher}
-The Vernam cipher is a symmetric key cipher where each character in the plaintext is combined with a corresponding character from a random key, producing ciphertext. This cipher is proven to be unbreakable when the key is truly random, used only once, and at least as long as the plaintext...
-
-\section{RC4}
-RC4 is a stream cipher designed by Ron Rivest in 1987. It uses a variable-length key and is known for its simplicity and speed. However, it has vulnerabilities that can compromise its security in certain applications...
-
-\section{Grain-128a}
-Grain-128a is a lightweight stream cipher designed for constrained environments such as RFID tags and sensor networks. It offers high performance and low power consumption...
-
-\section{Trivium}
-Trivium is also designed for lightweight applications, providing excellent security with low complexity. It operates on a 80-bit internal state and is known for its resistance against various attacks...
-
-\section{Salsa20}
-Salsa20 is a family of stream ciphers created by Daniel J. Bernstein. It is designed for performance on various platforms while maintaining a high level of security...
-
-\section{ChaCha20}
-ChaCha20 is a variant of Salsa20 designed to provide better security against cryptanalysis. It is widely used in modern cryptographic protocols...
+% Algorithms content here
 
 \chapter{Research Methodology}
-The research methodology includes a detailed implementation strategy outlining the steps taken to evaluate the performance of the stream ciphers discussed above. Benchmarking was performed under controlled conditions...
+% Methodology content here
 
 \chapter{Implementation}
-Implementation details include code examples demonstrating the usage of each stream cipher. Verification was done through tests ensuring that the algorithms produce expected outputs...
+% Implementation content here
 
 \chapter{Comparative Analysis}
-In this section, a comparative analysis of the security and performance characteristics of all discussed stream ciphers is presented. This includes an evaluation of their strengths and weaknesses...
+% Analysis content here
 
 \chapter{Results and Discussion}
-The results of the implementation and benchmarking are discussed here, along with findings and recommendations for future research...
+% Results content here
 
 \chapter{Conclusion}
-The conclusion summarizes the research findings and suggests areas for future work in the field of stream cipher algorithms...
+% Conclusion content here
 
-\chapter{Bibliography}
-\begin{thebibliography}{99}
-\bibitem{ref1} Author1, Title1, Year...
-\bibitem{ref2} Author2, Title2, Year...
-\end{thebibliography}
+\bibliographystyle{plain}
+\bibliography{references}
 
+\appendix
 \chapter{Appendices}
-\section{Code Samples}
-The following code samples demonstrate the implementation of various stream ciphers...
+% Appendices content here
 
-\section{Benchmark Data}
-\begin{table}[h!]
-\centering
-\begin{tabular}{|c|c|c|}
-\hline
-Cipher & Time (ms) & Security Level \\
-\hline
-Vernam & 0.1 & High \\
-RC4 & 0.05 & Medium \\
-Grain-128a & 0.02 & High \\
-Trivium & 0.03 & High \\
-Salsa20 & 0.01 & Very High \\
-ChaCha20 & 0.015 & Very High \\
-\hline
-\end{tabular}
-\caption{Benchmark results for stream ciphers}
-\end{table}
+\section*{Acknowledgements}
+% Acknowledgements content here
 
-\chapter{Acknowledgements}
-I would like to thank...
+\end{document}
